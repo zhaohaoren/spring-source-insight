@@ -55,6 +55,14 @@ import org.springframework.lang.Nullable;
  * @see HierarchicalBeanFactory
  * @see BeanFactoryUtils
  */
+
+/**
+ * 这些BeanFactory接口扩展，是为了扩充BeanFactory的一些功能。BeanFactory有很多扩展的继承接口，他们分别负责单一职责
+ *
+ * 这个接口就是可以让我们批量获取容器中的对象的一些操作：比如：
+ * 1. 获取容器中bean的名字
+ * 2. 获取容器中bean的总数
+ */
 public interface ListableBeanFactory extends BeanFactory {
 
 	/**

@@ -39,6 +39,10 @@ import org.springframework.util.ResourceUtils;
  * @see org.springframework.context.ApplicationContext
  * @see org.springframework.context.ResourceLoaderAware
  */
+
+/**
+ * 加载不同的资源 使用不同的策略 ，这里使用的是策略模式
+ */
 public interface ResourceLoader {
 
 	/** Pseudo URL prefix for loading from the class path: "classpath:". */

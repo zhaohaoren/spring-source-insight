@@ -117,6 +117,13 @@ import org.springframework.util.StringUtils;
  * @see #getBean
  * @see #resolveDependency
  */
+
+/**
+ * 从BeanFactory到 底层具体容器之间，第一个可以独立自己运行的IOC容器。
+ * 实现了 BeanDefinitionRegistry 很关键
+ *
+ * Spring将接口的实现类或者抽象类一般都放在 support下面
+ */
 @SuppressWarnings("serial")
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
 		implements ConfigurableListableBeanFactory, BeanDefinitionRegistry, Serializable {
@@ -160,6 +167,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/** Map from dependency type to corresponding autowired value. */
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
+	/**
+	 * ☆☆☆☆☆  核心的一个Map ☆☆☆☆☆
+	 * 存储容器中所有已经注册了的BeanDefinition实例的载体
+	 */
 	/** Map of bean definition objects, keyed by bean name. */
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 

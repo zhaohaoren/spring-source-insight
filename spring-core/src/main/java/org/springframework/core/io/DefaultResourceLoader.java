@@ -45,6 +45,11 @@ import org.springframework.util.StringUtils;
  * @see FileSystemResourceLoader
  * @see org.springframework.context.support.ClassPathXmlApplicationContext
  */
+
+/**
+ * 资源URI依照一些格式来进行资源的加载
+ * ResourceUtils 里面定义了很多前缀
+ */
 public class DefaultResourceLoader implements ResourceLoader {
 
 	@Nullable

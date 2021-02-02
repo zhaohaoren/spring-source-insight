@@ -98,7 +98,6 @@ import org.springframework.lang.Nullable;
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Chris Beams
- * @since 13 April 2001
  * @see BeanNameAware#setBeanName
  * @see BeanClassLoaderAware#setBeanClassLoader
  * @see BeanFactoryAware#setBeanFactory
@@ -113,6 +112,18 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.config.BeanPostProcessor#postProcessAfterInitialization
  * @see DisposableBean#destroy
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
+ * @since 13 April 2001
+ */
+
+/**
+ * Spring顶级的容器接口，Spring的各种容器都是基于这个接口实现的
+ * 定义了一个IOC容器的最基本的方法
+ *
+ * > 和FactoryBean的区别：
+ * @see org.springframework.beans.factory.FactoryBean
+ * FactoryBean也是Spring容器提供的一个接口，他本质是一个Bean，不过这个bean不是用来注入其他的依赖的，而是用来创建bean的。
+ * 实现了FactoryBean的类，在Spring容器初始化时候，会调用他们的getObject方法来创建bean。
+ * 也就是我们可以不通过直接配置Bean，而是通过配置其工厂也能配置Bean。配置一个FactoryBean的实例，最后从容器获取的是工厂创建的那个Bean，想要获取实际工厂，需要加&BeanName
  */
 public interface BeanFactory {
 

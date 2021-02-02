@@ -38,6 +38,10 @@ package org.springframework.core.env;
  * @see ConfigurableEnvironment
  * @see org.springframework.context.ConfigurableApplicationContext#getEnvironment()
  */
+
+/**
+ * 主要用于获取容器的启动参数
+ */
 public interface EnvironmentCapable {
 
 	/**
