@@ -82,7 +82,7 @@ esac
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
-JAVA_TMP_HOME=D:\\dev\\env\\jdk-11.0.10+9
+JAVA_TMP_HOME=/Users/zhaohaoren/workspace/env/jdk/open-jdk-11.0.10
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_TMP_HOME" ] ; then
