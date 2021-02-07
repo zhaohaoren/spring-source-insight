@@ -42,6 +42,8 @@ import org.springframework.util.ResourceUtils;
 
 /**
  * 加载不同的资源 使用不同的策略 ，这里使用的是策略模式
+ *
+ * 就是针对不同的资源，返回特定的Resource来加载。具体策略见：DefaultResourceLoader#getResource
  */
 public interface ResourceLoader {
 

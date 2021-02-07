@@ -45,6 +45,10 @@ import org.springframework.util.ResourceUtils;
  * @author Sam Brannen
  * @since 28.12.2003
  */
+
+/**
+ *
+ */
 public abstract class AbstractResource implements Resource {
 
 	/**

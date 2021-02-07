@@ -49,6 +49,14 @@ import org.springframework.lang.Nullable;
  * @see ByteArrayResource
  * @see InputStreamResource
  */
+
+/**
+ * Java对于资源的访问 通过URI
+ *
+ * 定义了Spring对资源的一些基本操作。如果想自定义自己的Resource，不要实现这个接口，而是去继承AbstractResource覆盖自己的实现
+ *
+ * 针对不同的资源，需要定义不同的Resource实现类去加载处理。 Spring提供了可以通过给定的前缀自动来加载资源的方式：ResourceLoader
+ */
 public interface Resource extends InputStreamSource {
 
 	/**

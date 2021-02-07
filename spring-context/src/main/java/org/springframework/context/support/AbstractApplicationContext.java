@@ -128,9 +128,12 @@ import org.springframework.util.ReflectionUtils;
  */
 
 /**
- * 比较重要的一个抽象类： 基本容器的实现代码
+ * 最重要的一个抽象类： 基本容器的实现代码！ ☆☆☆☆☆☆☆☆☆☆☆
+ * 核心的核心就是refresh方法
+ *
+ * 容器初始化的主要流程： 配置文件 -> Resource加载 -> 解析为BeanDefinition -> 注册BeanDefinition进行依赖注入
  * <p>
- * 模板方法模式
+ * 思想基于：模板方法模式
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		implements ConfigurableApplicationContext {
@@ -521,6 +524,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * 模板方法模式的 模板方法
+	 *
+	 * 核心方法：可以认为就是IOC容器的启动方法
 	 */
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {

@@ -45,6 +45,11 @@ import org.springframework.core.AliasRegistry;
  * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
  * @see PropertiesBeanDefinitionReader
  */
+
+/**
+ * 主要负责BeanDefinition的注册等操作
+ * 将BeanDefinition注册到注册表Map中 这个map在DefaultListableBeanFactory里面
+ */
 public interface BeanDefinitionRegistry extends AliasRegistry {
 
 	/**

@@ -37,6 +37,13 @@ import org.springframework.lang.Nullable;
  * @since 1.1
  * @see org.springframework.core.io.Resource
  */
+
+/**
+ * BeanDefinitionReader 得益于 ResourceLoader的强大
+ * 作用就是用来读取BeanDefinition
+ *
+ * 它会使用ResourceLoader或者ResourcePatternResolver来将配置的内容解析为BeanDefinition，并最终注入到BeanDefinitionRegistry中
+ */
 public interface BeanDefinitionReader {
 
 	/**
@@ -78,6 +85,7 @@ public interface BeanDefinitionReader {
 	/**
 	 * Return the BeanNameGenerator to use for anonymous beans
 	 * (without explicit bean name specified).
+	 * 生成Bean的名字
 	 */
 	BeanNameGenerator getBeanNameGenerator();
 

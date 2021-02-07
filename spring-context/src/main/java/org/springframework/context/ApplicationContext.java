@@ -63,7 +63,9 @@ import org.springframework.lang.Nullable;
  * HierarchicalBeanFactory 可以支持多层级的容器，来对bean进行管理
  * MessageSource 管理message功能及一些国际化的功能
  * ApplicationEventPublisher 支持事件发布
- * ResourcePatternResolver 资源的加载
+ * ResourcePatternResolver 资源的加载，（这个意味着容器本身也是一个资源加载器）
+ *
+ * 有几个常见的实现类，就是我们项目加载中的实际使用的容器
  *
  */
 public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,

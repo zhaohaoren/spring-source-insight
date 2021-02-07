@@ -76,6 +76,12 @@ import org.springframework.util.xml.XmlValidationModeDetector;
  * @see org.springframework.beans.factory.support.DefaultListableBeanFactory
  * @see org.springframework.context.support.GenericApplicationContext
  */
+
+/**
+ * XML方式配置Bean的 BeanDefinitionReader读取实现类
+ *
+ * 好像没有看到注解方式的对应的实现类？？？
+ */
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 	/**
@@ -387,7 +393,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			throws BeanDefinitionStoreException {
 
 		try {
+			// 这里将XML文件解析成了Document对象
 			Document doc = doLoadDocument(inputSource, resource);
+			// 再次解析document对象，获取配置的属性，然后保存到BeanDefinition中去
 			int count = registerBeanDefinitions(doc, resource);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Loaded " + count + " bean definitions from " + resource);
@@ -506,9 +514,13 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @see BeanDefinitionDocumentReader#registerBeanDefinitions
 	 */
 	public int registerBeanDefinitions(Document doc, Resource resource) throws BeanDefinitionStoreException {
+		//创建BeanDefinitionDocumentReader这个对象主要目的，从Document对象获取BeanDefinition
 		BeanDefinitionDocumentReader documentReader = createBeanDefinitionDocumentReader();
+		//获取BeanDefinition注册表beanDefinitionMap 在本次资源加载之前的数量
 		int countBefore = getRegistry().getBeanDefinitionCount();
+		// 注册， 对于xml里面各种标签的主要处理逻辑就在这里面
 		documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
+		// 注册完之后的数量 减去 原来的数量，返回本次注册的BeanDefinition的数量。
 		return getRegistry().getBeanDefinitionCount() - countBefore;
 	}
 
