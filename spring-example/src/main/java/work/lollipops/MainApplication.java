@@ -1,8 +1,9 @@
-package work.lollipops.service;
+package work.lollipops;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import work.lollipops.service.HelloService;
 
 import java.util.stream.Stream;
 
@@ -21,5 +22,8 @@ public class MainApplication {
 
 		HelloService helloServiceImpl = applicationContext.getBean("helloServiceImpl", HelloService.class);
 		helloServiceImpl.sayHello();
+
+		Object bean = applicationContext.getBean("postProcessor01");
+		System.out.println(bean);
 	}
 }

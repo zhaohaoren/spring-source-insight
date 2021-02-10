@@ -118,7 +118,6 @@ import org.springframework.lang.Nullable;
 /**
  * Spring顶级的容器接口，Spring的各种容器都是基于这个接口实现的
  * 定义了一个IOC容器的最基本的方法
- *
  * > 和FactoryBean的区别：
  * @see org.springframework.beans.factory.FactoryBean
  * FactoryBean也是Spring容器提供的一个接口，他本质是一个Bean，不过这个bean不是用来注入其他的依赖的，而是用来创建bean的。

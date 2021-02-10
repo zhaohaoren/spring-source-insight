@@ -262,6 +262,8 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	 */
 	@Override
 	protected final void refreshBeanFactory() throws IllegalStateException {
+		//对于注解，defaultListableBeanFactory容器在注册组件类之前，即在调用容器构造函数时候，就已经被创建了
+		// 这里主要就是更新容器的刷新状态，并且设置其BeanFactory实例的序列化id，方便外部通过网络来你序列化此处的beanFactory实例
 		if (!this.refreshed.compareAndSet(false, true)) {
 			throw new IllegalStateException(
 					"GenericApplicationContext does not support multiple refresh attempts: just call 'refresh' once");

@@ -29,6 +29,11 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
  * @author Juergen Hoeller
  * @since 3.0.1
  * @see org.springframework.context.annotation.ConfigurationClassPostProcessor
+ *
+ * 在正常的BeanFactoryPostProcessor处理开始前，注册更多的自定义的BeanDefinition
+ *
+ * 具体使用列子：实现这个接口，去搜索某些第三方的class 然后注册到Spring容器里面。mybatis框架就是基于这个实现的。
+ *
  */
 public interface BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProcessor {
 

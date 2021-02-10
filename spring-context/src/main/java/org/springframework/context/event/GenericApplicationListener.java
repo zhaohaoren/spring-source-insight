@@ -38,6 +38,7 @@ public interface GenericApplicationListener extends ApplicationListener<Applicat
 
 	/**
 	 * Determine whether this listener actually supports the given event type.
+	 * ResolvableType 可以获取泛型的信息 
 	 * @param eventType the event type (never {@code null})
 	 */
 	boolean supportsEventType(ResolvableType eventType);
