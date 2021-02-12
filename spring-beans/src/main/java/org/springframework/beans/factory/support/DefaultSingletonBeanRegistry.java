@@ -67,6 +67,7 @@ import org.springframework.util.StringUtils;
  * @see #registerDisposableBean
  * @see org.springframework.beans.factory.DisposableBean
  * @see org.springframework.beans.factory.config.ConfigurableBeanFactory
+ * 该类主要负责容器创建出来的单例进行注册
  */
 public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
 
@@ -165,6 +166,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	@Override
 	@Nullable
 	public Object getSingleton(String beanName) {
+		// 允许非延迟加载，即可以理解加载bean实例
 		return getSingleton(beanName, true);
 	}
 
@@ -179,19 +181,30 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		// Quick check for existing instance without full singleton lock
+		// 单例缓存的一级缓存！ 尝试从一级缓存中获取bean实例（完整的健全的bean）
 		Object singletonObject = this.singletonObjects.get(beanName);
+		// 如果一级缓存中没有实例，并且判断了该bean是否在创建中
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+			// 从二级缓存获取 （这个缓存是还有set属性的bean，处于正在创建中的bean）
 			singletonObject = this.earlySingletonObjects.get(beanName);
+			// 即使没有注入属性的bean，我们也让其可以返回，主要是为了处理循环依赖的问题。
 			if (singletonObject == null && allowEarlyReference) {
+				// 因为要操作缓存了，所以需要同步该操作
 				synchronized (this.singletonObjects) {
 					// Consistent creation of early reference within full singleton lock
 					singletonObject = this.singletonObjects.get(beanName);
 					if (singletonObject == null) {
 						singletonObject = this.earlySingletonObjects.get(beanName);
 						if (singletonObject == null) {
+							// singletonFactories 三级缓存// 在锁内操作，都是同步操作，所以这个是HashMap 性能高
+							// 从该缓存中尝试获取可以创建此bean的单例工厂实例
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 							if (singletonFactory != null) {
+								// 有对应工厂实例的话，就调用getObject()创建实例
 								singletonObject = singletonFactory.getObject();
+								// 实例放入到二级缓存
+								// 从三级缓存中移除
+								// 防止重复改方式创建此bean（那我直接put是不是也不会走到三级缓存了？是不是防止意外？）
 								this.earlySingletonObjects.put(beanName, singletonObject);
 								this.singletonFactories.remove(beanName);
 							}
@@ -341,6 +354,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param beanName the name of the bean
 	 */
 	public boolean isSingletonCurrentlyInCreation(String beanName) {
+		// 正在创建的beanName 是否包含这个bean
 		return this.singletonsCurrentlyInCreation.contains(beanName);
 	}
 

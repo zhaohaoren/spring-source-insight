@@ -942,6 +942,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// Instantiate all remaining (non-lazy-init) singletons.
 		// 实例化那些 非延时加载的 单例bean
+		// 这里面就有《依赖注入》的实现逻辑
 		beanFactory.preInstantiateSingletons();
 	}
 

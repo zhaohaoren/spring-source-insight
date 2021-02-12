@@ -35,6 +35,9 @@ import org.springframework.beans.BeansException;
  * @since 1.0.2
  * @param <T> the object type
  * @see FactoryBean
+ *
+ * 作用其实和FactoryBean使用类似：
+ * 但是为了区分用户使用和框架使用，这里叫ObjectFactory
  */
 @FunctionalInterface
 public interface ObjectFactory<T> {
