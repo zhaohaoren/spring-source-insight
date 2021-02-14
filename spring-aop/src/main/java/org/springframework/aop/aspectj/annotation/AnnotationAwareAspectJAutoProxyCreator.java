@@ -47,6 +47,8 @@ import org.springframework.util.Assert;
  * @see org.springframework.aop.aspectj.annotation.AspectJAdvisorFactory
  *
  * 注解AOP创建的核心类， 其核心创建的方法在其顶级父类里面 ：AbstractAutoProxyCreator
+ *
+ *
  */
 @SuppressWarnings("serial")
 public class AnnotationAwareAspectJAutoProxyCreator extends AspectJAwareAdvisorAutoProxyCreator {

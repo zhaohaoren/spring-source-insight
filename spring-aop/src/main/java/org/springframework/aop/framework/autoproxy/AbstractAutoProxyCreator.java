@@ -90,6 +90,15 @@ import org.springframework.util.StringUtils;
  * @see DefaultAdvisorAutoProxyCreator
  *
  * 为Bean创建AOP动态代理的核心！！！
+ *
+ * 主要看	implements SmartInstantiationAwareBeanPostProcessor, BeanFactoryAware
+ * SmartInstantiationAwareBeanPostProcessor： 实现了后置处理器，这是一个InstantiationAwareBeanPostProcessor类型的后置处理器，和普通的还不一样，
+ * 该后置处理器会在创建bean实例之前，尝试使用该后置处理器来返回对象。
+ * BeanFactoryAware： 注入BeanFactory容器
+ *
+ * 所以 AbstractAutoProxyCreator 本质上是一个实现了 BeanFactoryAware 的后置处理器，
+ * IOC容器启动的时候，会加载所有的后置处理器，所以这个后置处理器AnnotationAwareAspectJAutoProxyCreator 就被创建注入到容器中了
+ *
  */
 @SuppressWarnings("serial")
 public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
@@ -204,6 +213,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		this.applyCommonInterceptorsFirst = applyCommonInterceptorsFirst;
 	}
 
+	//实现了BeanFactoryAware，子类对其有重写
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) {
 		this.beanFactory = beanFactory;
@@ -242,14 +252,23 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		return wrapIfNecessary(bean, beanName, cacheKey);
 	}
 
+	/**
+	 * 后置处理器的一些操作
+	 */
 	@Override
 	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) {
+		// 容器每一个bean实例化之前都会走这个方法来创建。
+
 		Object cacheKey = getCacheKey(beanClass, beanName);
 
 		if (!StringUtils.hasLength(beanName) || !this.targetSourcedBeans.contains(beanName)) {
+			// 1.判断当前bean是否在advisedBeans的bean中
+			// 第一次肯定是空的，不包含
 			if (this.advisedBeans.containsKey(cacheKey)) {
 				return null;
 			}
+			// 2. 判断bean是不是基础类型的bean（实现了Advice，Pointcut等接口的bean或者是不是切面），
+			// 3. 是否需要跳过， 普通的bean就会返回false，直接跳过不执行这段
 			if (isInfrastructureClass(beanClass) || shouldSkip(beanClass, beanName)) {
 				this.advisedBeans.put(cacheKey, Boolean.FALSE);
 				return null;
@@ -292,12 +311,15 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * Create a proxy with the configured interceptors if the bean is
 	 * identified as one to proxy by the subclass.
 	 * @see #getAdvicesAndAdvisorsForBean
+	 * bean创建之后，这里也是AOP的核心
+	 * 该方法 会为AOP创建代理对象
 	 */
 	@Override
 	public Object postProcessAfterInitialization(@Nullable Object bean, String beanName) {
 		if (bean != null) {
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
 			if (this.earlyProxyReferences.remove(cacheKey) != bean) {
+				// 判断该对象是否需要包装
 				return wrapIfNecessary(bean, beanName, cacheKey);
 			}
 		}

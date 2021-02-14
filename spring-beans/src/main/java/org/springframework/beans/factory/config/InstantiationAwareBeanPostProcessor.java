@@ -78,6 +78,7 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 */
 	@Nullable
 	default Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+		// 这也是AOP的很重要一点，通过这个让AOP来生成代理bean， 具体的实现看子类，AbstractAutoProxyCreator
 		return null;
 	}
 
