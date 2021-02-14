@@ -119,8 +119,9 @@ public abstract class AopConfigUtils {
 			Class<?> cls, BeanDefinitionRegistry registry, @Nullable Object source) {
 
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
-
+		// 判断是否有重复的autoProxyCreator
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
+			// 一般都没有，如果有，表示用户自定义了一个，就需要比较下creator的优先级，一般都不会进这个逻辑
 			BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
 			if (!cls.getName().equals(apcDefinition.getBeanClassName())) {
 				int currentPriority = findPriorityForClass(apcDefinition.getBeanClassName());
@@ -131,7 +132,7 @@ public abstract class AopConfigUtils {
 			}
 			return null;
 		}
-
+		// 如果用户没有自定义，就使用默认的AnnotationAwareAspectAutoProxyCreator
 		RootBeanDefinition beanDefinition = new RootBeanDefinition(cls);
 		beanDefinition.setSource(source);
 		beanDefinition.getPropertyValues().add("order", Ordered.HIGHEST_PRECEDENCE);

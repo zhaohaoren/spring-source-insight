@@ -88,6 +88,8 @@ import org.springframework.util.StringUtils;
  * @see #getAdvicesAndAdvisorsForBean
  * @see BeanNameAutoProxyCreator
  * @see DefaultAdvisorAutoProxyCreator
+ *
+ * 为Bean创建AOP动态代理的核心！！！
  */
 @SuppressWarnings("serial")
 public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport

@@ -64,6 +64,9 @@ public class AspectJAwareAdvisorAutoProxyCreator extends AbstractAdvisorAutoProx
 	 * precedence to lowest. "On the way in" to a join point, the highest precedence
 	 * advisor should run first. "On the way out" of a join point, the highest
 	 * precedence advisor should run last.
+	 *
+	 *
+	 * Advisor的排序
 	 */
 	@Override
 	protected List<Advisor> sortAdvisors(List<Advisor> advisors) {

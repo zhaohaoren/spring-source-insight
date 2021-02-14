@@ -43,6 +43,8 @@ import org.springframework.lang.Nullable;
  * @since 1.2
  * @see org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#setCustomTargetSourceCreators
  * @see org.springframework.aop.framework.autoproxy.target.LazyInitTargetSourceCreator
+ *
+ * Bean实例化过程中给Bean添加额外的逻辑。（在bean初始化之前）
  */
 public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 
@@ -69,6 +71,10 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @see #postProcessAfterInstantiation
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getBeanClass()
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getFactoryMethodName()
+	 *
+	 * 在bean实例化之前直接返回一个对象，object为返回的对象。 可以直接返回一个对象（比如代理对象）来掉包内置的实例化逻辑创建的对象
+	 *
+	 * 创建bean的时候，实例化bean操作会调用这个方法，如果这个方法不返回null，那么就使用该方法返回的对象，继续操作，而不走原来的实例化逻辑
 	 */
 	@Nullable
 	default Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
@@ -89,6 +95,9 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * instances being invoked on this bean instance.
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see #postProcessBeforeInstantiation
+	 *
+	 * bean实例化之后，但是属性被设置之前的调用，返回是否需要再属性设置，如果返回false，后续将不再进行属性的依赖注入。
+	 * 返回true就继续调用populateBean方法，对创建的Bean实例进行属性赋值
 	 */
 	default boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
 		return true;

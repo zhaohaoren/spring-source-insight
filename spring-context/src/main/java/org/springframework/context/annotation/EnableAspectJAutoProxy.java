@@ -119,12 +119,17 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+// AspectJAutoProxyRegistrar类实例注入Spring容器中
+// 这里就是AOP分析的入口
 @Import(AspectJAutoProxyRegistrar.class)
 public @interface EnableAspectJAutoProxy {
 
 	/**
 	 * Indicate whether subclass-based (CGLIB) proxies are to be created as opposed
 	 * to standard Java interface-based proxies. The default is {@code false}.
+	 * 表明该类采用CGLIB代理还是JDK的动态代理
+	 * true会使用CGLIB代理
+	 * false的话，会尽可能的使用jdk动态代理，（只要符合jdk动态代理要求）
 	 */
 	boolean proxyTargetClass() default false;
 
@@ -133,6 +138,8 @@ public @interface EnableAspectJAutoProxy {
 	 * for retrieval via the {@link org.springframework.aop.framework.AopContext} class.
 	 * Off by default, i.e. no guarantees that {@code AopContext} access will work.
 	 * @since 4.3.1
+	 * 是否将动态代理对象暴露出来
+	 * 用户使用的Bean都是Spring代理的
 	 */
 	boolean exposeProxy() default false;
 
