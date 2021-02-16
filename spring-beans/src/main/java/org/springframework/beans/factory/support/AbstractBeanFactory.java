@@ -248,7 +248,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
-		//1. 尝试从缓存集合中获取bean实例
+		//1. 先尝试从缓存集合中获取bean实例
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -297,19 +297,24 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 				// 递归去找
 			}
-			// 一旦找到了
+
 			if (!typeCheckOnly) {
+				// 标记当前的bean已经被创建，防止多线程环境下重复创建bean
 				markBeanAsCreated(beanName);
 			}
 
+			// 缓存中没有获取到bean，就开始创建
 			try {
+				// 1. 先获取bean的定义信息
 				//将父类的BeanDefinition和子类的BeanDefinition进行合并覆盖
 				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
 				// Guarantee initialization of beans that the current bean depends on.
 				// 处理depends—on
+				// 2. 获取当前bean依赖的其他的bean
 				String[] dependsOn = mbd.getDependsOn();
+				// 创建依赖bean
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
 						if (isDependent(beanName, dep)) {
@@ -330,11 +335,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 						}
 					}
 				}
-
+				// 3. 开始创建bean
 				// Create bean instance.
 				if (mbd.isSingleton()) {
+					//传入一个beanName 和一个工厂，来创建bean
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
+							// 使用createBean来创建bean
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {

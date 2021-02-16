@@ -137,6 +137,11 @@ final class PostProcessorRegistrationDelegate {
 			invokeBeanFactoryPostProcessors(beanFactoryPostProcessors, beanFactory);
 		}
 
+		// 上面执行的 先是BeanDefinitionRegistryPostProcessor 这些processor，
+		// BeanDefinitionRegistryPostProcessor继承BeanFactoryPostProcessor
+		// 下面执行：BeanFactoryPostProcessor
+		// 执行的逻辑是一模一样的，先优先级 再order 最后普通
+
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let the bean factory post-processors apply to them!
 		String[] postProcessorNames =

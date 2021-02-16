@@ -84,6 +84,8 @@ import org.springframework.util.StringUtils;
  * @see #setTransactionManager
  * @see #setTransactionAttributes
  * @see #setTransactionAttributeSource
+ *
+ * 事务的最后主要核心逻辑在这里面
  */
 public abstract class TransactionAspectSupport implements BeanFactoryAware, InitializingBean {
 
@@ -325,6 +327,8 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * @param invocation the callback to use for proceeding with the target invocation
 	 * @return the return value of the method, if any
 	 * @throws Throwable propagated from the target invocation
+	 *
+	 * ☆☆☆☆☆☆☆☆☆☆☆ 主要是这个方法  ☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆
 	 */
 	@Nullable
 	protected Object invokeWithinTransaction(Method method, @Nullable Class<?> targetClass,
@@ -361,6 +365,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			TransactionInfo txInfo = createTransactionIfNecessary(ptm, txAttr, joinpointIdentification);
 
 			Object retVal;
+			// 一个事务的处理
 			try {
 				// This is an around advice: Invoke the next interceptor in the chain.
 				// This will normally result in a target object being invoked.
@@ -368,6 +373,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			}
 			catch (Throwable ex) {
 				// target invocation exception
+				// 如果发生异常了，进行回滚
 				completeTransactionAfterThrowing(txInfo, ex);
 				throw ex;
 			}
@@ -382,7 +388,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 					retVal = VavrDelegate.evaluateTryFailure(retVal, txAttr, status);
 				}
 			}
-
+			// 执行正常 就提交
 			commitTransactionAfterReturning(txInfo);
 			return retVal;
 		}

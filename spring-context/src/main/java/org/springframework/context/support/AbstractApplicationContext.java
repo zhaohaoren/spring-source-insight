@@ -533,6 +533,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		synchronized (this.startupShutdownMonitor) {
 			// Prepare this context for refreshing.
 			//1. 为刷新容器做准备，
+			// 刷新前预处理
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
@@ -556,10 +557,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 扫描应用中所有的beandefinition并注册到容器中，完成容器级别的后置处理器工作
 				invokeBeanFactoryPostProcessors(beanFactory);
 
+				//// 上面都是和BeanFactory相关的，下年都是Bean相关的
+
 				// Register bean processors that intercept bean creation.
 				// 注册并拦截bean创建过程中的PostProcessor（处理bean级别的后置处理器）
 				// 在getbean的时候才会作用这些后置处理器
 				registerBeanPostProcessors(beanFactory);
+
+				// 都只是注册，但是没有执行，往BeanFactory中注册了这些信息
 
 				// Initialize message source for this context.
 				// 一些国际化的配置，针对不同的地区展示不同的语言内容（跳过）
@@ -568,6 +573,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// Initialize event multicaster for this context.
 				// 初始化ApplicationEventMulticaster 为事件的发布者
 				// 该监听器，依据不同的事件通知不同的监听者
+				// 初始化 事件派发器
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
@@ -581,6 +587,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// Instantiate all remaining (non-lazy-init) singletons.
 				// 实例化那些非懒加载的单例bean
+				// ☆☆☆☆☆  这步骤完成了，就完成了Bean工厂的初始化
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
@@ -821,6 +828,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void initApplicationEventMulticaster() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+		// 如果我们自己配置了 事件派发器，就使用我们配置的
 		if (beanFactory.containsLocalBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME)) {
 			this.applicationEventMulticaster =
 					beanFactory.getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class);
@@ -829,6 +837,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 		else {
+			// 如果我们没有配，就创建一个Simple事件派发器
 			this.applicationEventMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
 			beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, this.applicationEventMulticaster);
 			if (logger.isTraceEnabled()) {
@@ -943,6 +952,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Instantiate all remaining (non-lazy-init) singletons.
 		// 实例化那些 非延时加载的 单例bean
 		// 这里面就有《依赖注入》的实现逻辑
+		//  ☆☆☆☆☆ 这个方法最核心的地方  ☆☆☆☆☆ 初始化剩下的所有的单例bean
 		beanFactory.preInstantiateSingletons();
 	}
 
